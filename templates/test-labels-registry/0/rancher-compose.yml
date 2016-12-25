@@ -1,0 +1,42 @@
+.catalog:
+  name: test-labels-registry
+  uuid: test-labels-registry-0
+  description: "Testing purposes"
+  version: 0.1
+
+  questions:
+    - variable: FQDN_NAME
+      type: string
+      required: true
+
+    - variable: DB_DATABASE
+      type: string
+      required: true
+      default: registry
+
+    - variable: DB_USER
+      type: string
+      required: true
+      default: registry
+
+    - variable: DB_PASSWORD
+      type: password
+      required: true
+
+    - variable: PORTUS_VERSION
+      type: enum
+      required: true
+      default: 2.1.1
+      options:
+        - 2.1.1
+        - 2.1.0
+        - 2.0.5
+        - 2.0.4
+
+    - variable: PORTUS_PASSWORD
+      type: password
+      required: true
+
+    - variable: PORTUS_SECRET_KEY_BASE
+      type: password
+      required: true
