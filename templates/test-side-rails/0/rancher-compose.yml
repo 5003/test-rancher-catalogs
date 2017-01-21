@@ -1,0 +1,5 @@
+.catalog:
+  name: test-side-rails
+  uuid: test-side-rails-0
+  description: "Testing purposes"
+  version: 0.1

@@ -1,0 +1,5 @@
+.catalog:
+  name: test-side-rails-depends
+  uuid: test-side-rails-depends-0
+  description: "Testing purposes"
+  version: 0.1

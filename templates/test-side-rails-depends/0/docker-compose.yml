@@ -1,0 +1,24 @@
+version: '2'
+services:
+  db:
+    image: mariadb:5
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - stored:/var/lib/mysql/
+    labels:
+      io.rancher.container.hostname_override: container_name
+
+  rails:
+    image: 5003/test-rails:ruby-2.3
+    command: bundle exec unicorn --port 3000
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      # ref ==> http://stackoverflow.com/questions/33788818/docker-mysql-cant-connect-to-socket
+      DB_PORT_3306_TCP_ADDR: db
+    labels:
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: db
