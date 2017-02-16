@@ -1,0 +1,5 @@
+.catalog:
+  name: test-label-once-sleep-none-rails
+  uuid: test-label-once-sleep-none-rails-0
+  description: "Testing purposes"
+  version: 0.1
