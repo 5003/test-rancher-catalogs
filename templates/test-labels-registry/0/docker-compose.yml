@@ -1,13 +1,14 @@
 version: '2'
 
 services:
-  certificate:
+  portus:
     image: 5003/test:insecure-certificate
     command: top
     volumes:
       - /certs/
     labels:
       io.rancher.sidekicks: userdata, registry, frontend
+      io.rancher.container.hostname_override: container_name
 
   userdata:
     image: mariadb:10
@@ -18,6 +19,8 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     volumes:
       - userdata:/var/lib/mysql/
+    labels:
+      io.rancher.container.hostname_override: container_name
 
   registry:
     # issue: https://github.com/SUSE/Portus/issues/905
@@ -25,6 +28,7 @@ services:
     ports:
       - 5000:5000
     environment:
+      PROXY_PASS_PORT: 5000
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /images/
       REGISTRY_AUTH_TOKEN_REALM: http://${FQDN_NAME}:5080/v2/token
       REGISTRY_AUTH_TOKEN_SERVICE: ${FQDN_NAME}:5000
@@ -37,13 +41,14 @@ services:
           threshold: 5
           backoff: 1
     volumes_from:
-      - certificate
+      - portus
     volumes:
       - images:/images/
+    labels:
+      io.rancher.container.hostname_override: container_name
 
   frontend:
     image: 5003/portus-git:$PORTUS_VERSION
-    restart: always
     command: puma --bind tcp://0.0.0.0:3000 --environment production --workers 3
     ports:
       - 5080:3000
@@ -51,6 +56,7 @@ services:
       - userdata
       - registry
     environment:
+      PROXY_PASS_PORT: 5080
       RAILS_ENV: production
       # ref: https://github.com/SUSE/Portus/blob/984671662ade8c105f019b1ee108b71ef87a9821/app/views/errors/500.html.erb
       PORTUS_SECRET_KEY_BASE: $PORTUS_SECRET_KEY_BASE
@@ -64,4 +70,6 @@ services:
       # ref: https://github.com/SUSE/Portus/blob/cddfb5924fae7318d2effb118aaaa48e3d49ff26/config/config.yml
       PORTUS_CHECK_SSL_USAGE_ENABLED: 'false'
     volumes_from:
-      - certificate
+      - portus
+    labels:
+      io.rancher.container.hostname_override: container_name
