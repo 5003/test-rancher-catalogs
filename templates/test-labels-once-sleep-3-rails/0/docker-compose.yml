@@ -12,11 +12,10 @@ services:
   rails:
     image: 5003/test-rails:ruby-2.3
     command: bundle exec unicorn --port 3000
-    ports:
-      - 3000:3000
     links:
       - db
     environment:
+      PROXY_PASS_PORT: 3000
       # ref ==> http://stackoverflow.com/questions/33788818/docker-mysql-cant-connect-to-socket
       DB_PORT_3306_TCP_ADDR: db
     labels:
