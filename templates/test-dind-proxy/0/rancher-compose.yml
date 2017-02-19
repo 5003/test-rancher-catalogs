@@ -1,0 +1,5 @@
+.catalog:
+  name: test-dind-proxy
+  uuid: test-dind-proxy-0
+  description: "Testing purposes"
+  version: 0.1
